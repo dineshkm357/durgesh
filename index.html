@@ -332,11 +332,20 @@
     }
 
     function showBill() {
-      const billDetails = document.getElementById('billDetails');
+      const customerName = document.getElementById('customerName').value;
+      const customerAddress = document.getElementById('customerAddress').value;
+      const customerMob = document.getElementById('customerMob').value;
+
       const totalProductAmount = products.reduce((sum, product) => sum + product.totalPrice, 0);
       const totalOldItemAmount = oldProducts.reduce((sum, oldProduct) => sum + oldProduct.oldPrice, 0);
+      const netAmount = totalProductAmount - totalOldItemAmount;
 
       const billHTML = `
+        <h3>Customer Details</h3>
+        <p><strong>Name:</strong> ${customerName}</p>
+        <p><strong>Address:</strong> ${customerAddress}</p>
+        <p><strong>Mobile:</strong> ${customerMob}</p>
+
         <h3>Product Details</h3>
         ${renderTable(products, [
           'Item Name',
@@ -357,9 +366,9 @@
         ])}
         <p><strong>Total Product Amount:</strong> ${totalProductAmount}</p>
         <p><strong>Total Old Items Amount:</strong> ${totalOldItemAmount}</p>
-        <p><strong>Net Amount:</strong> ${totalProductAmount - totalOldItemAmount}</p>
+        <p><strong>Net Amount:</strong> ${netAmount}</p>
       `;
-      billDetails.innerHTML = billHTML;
+      document.getElementById('billDetails').innerHTML = billHTML;
       document.getElementById('billModal').style.display = 'flex';
     }
 
