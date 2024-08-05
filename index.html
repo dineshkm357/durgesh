@@ -82,8 +82,8 @@
       background: #fff;
       padding: 20px;
       border-radius: 8px;
-      width: 80%;
-      max-width: 500px;
+      width: 100%;
+      max-width: 1000px;
     }
     .hide {
       display: none;
@@ -169,6 +169,8 @@
       <label><input type="checkbox" id="toggleRatePerGram" checked> Rate Per Gram</label>
       <label><input type="checkbox" id="toggleChargeAmount" checked> Charge Amount</label>
       <label><input type="checkbox" id="toggleDiscount" checked> Discount</label>
+      <label><input type="checkbox" id="toggleDescription" checked> Description</label>
+      <label><input type="checkbox" id="toggleAmount" checked> Amount</label>
       <label><input type="checkbox" id="toggleTotalPrice" checked> Total Price</label>
     </div>
     <table id="productTable">
@@ -180,6 +182,7 @@
           <th class="rate-per-gram">Rate Per Gram</th>
           <th class="charge-amount">Charge Amount</th>
           <th class="discount">Discount</th>
+          <th class="amount">Amount</th>
           <th class="total-price">Total Price</th>
         </tr>
       </thead>
@@ -232,11 +235,7 @@
           <label for="oldRatePerGram">Rate Per Gram</label>
           <input type="number" id="oldRatePerGram">
         </div>
-        <div class="form-group">
-          <label for="oldPrice">Price</label>
-          <input type="text" id="oldPrice" readonly>
-        </div>
-        <button class="btn-primary" onclick="addOldItem()">Add Item</button>
+        <button class="btn-success" onclick="addOldItem()">Add Old Item</button>
         <button class="btn-danger" onclick="closeOldItemForm()">Close</button>
       </div>
     </div>
@@ -262,10 +261,12 @@
       const ratePerGram = parseFloat(document.getElementById('ratePerGram').value);
       const chargeAmount = parseFloat(document.getElementById('chargeAmount').value);
       const discount = parseFloat(document.getElementById('discount').value);
+      const description = `${weight} grams @ ${ratePerGram}/gram + ${chargeAmount} - ${discount}`;
+      const amount = weight * ratePerGram + chargeAmount - discount;
 
       if (itemName && weight && ratePerGram && !isNaN(chargeAmount) && !isNaN(discount)) {
-        const totalPrice = weight * ratePerGram + chargeAmount - discount;
-        products.push({ itemName, productType, weight, ratePerGram, chargeAmount, discount, totalPrice });
+        const totalPrice = amount;
+        products.push({ itemName, productType, weight, ratePerGram, chargeAmount, discount, description, amount, totalPrice });
         renderProductTable();
         clearForm();
       } else {
@@ -294,6 +295,7 @@
           <td class="rate-per-gram">${product.ratePerGram}</td>
           <td class="charge-amount">${product.chargeAmount}</td>
           <td class="discount">${product.discount}</td>
+          <td class="amount">${product.amount.toFixed(2)}</td>
           <td class="total-price">${product.totalPrice.toFixed(2)}</td>
         `;
         tbody.appendChild(row);
@@ -369,6 +371,7 @@
               <th>Rate Per Gram</th>
               <th>Charge Amount</th>
               <th>Discount</th>
+              <th>Amount</th>
               <th>Total Price</th>
             </tr>
           </thead>
@@ -381,6 +384,7 @@
                 <td>${product.ratePerGram}</td>
                 <td>${product.chargeAmount}</td>
                 <td>${product.discount}</td>
+                <td>${product.amount.toFixed(2)}</td>
                 <td>${product.totalPrice.toFixed(2)}</td>
               </tr>
             `).join('')}
