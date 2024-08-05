@@ -5,70 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Billing System</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
-      color: #fff;
-      cursor: pointer;
-    }
-    .btn-primary {
-      background-color: #007bff;
-    }
-    .btn-success {
-      background-color: #28a745;
-    }
-    .btn-danger {
-      background-color: #dc3545;
-    }
+    /* Inline CSS for the example */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-    }
-    table, th, td {
-      border: 1px solid #ddd;
     }
     th, td {
+      border: 1px solid #ddd;
       padding: 8px;
       text-align: left;
     }
     th {
-      background-color: #f4f4f4;
+      background-color: #f2f2f2;
+    }
+    .hidden {
+      display: none;
     }
     .modal {
       display: none;
       position: fixed;
-      left: 0;
       top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
@@ -76,164 +33,79 @@
       align-items: center;
     }
     .modal-content {
-      background: #fff;
+      background-color: white;
       padding: 20px;
-      border-radius: 8px;
+      border-radius: 5px;
       width: 80%;
-      max-width: 500px;
-    }
-    .hide {
-      display: none;
-    }
-    .column-toggle {
-      margin-bottom: 15px;
+      max-width: 600px;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Billing System</h1>
+  <!-- Column Toggle Options -->
+  <div class="column-toggle">
+    <label><input type="checkbox" id="toggleItemName" checked> Item Name</label>
+    <label><input type="checkbox" id="toggleProductType" checked> Product Type</label>
+    <label><input type="checkbox" id="toggleWeight" checked> Weight</label>
+    <label><input type="checkbox" id="toggleRatePerGram" checked> Rate Per Gram</label>
+    <label><input type="checkbox" id="toggleChargeAmount" checked> Charge Amount</label>
+    <label><input type="checkbox" id="toggleDiscount" checked> Discount</label>
+    <label><input type="checkbox" id="toggleTotalPrice" checked> Total Price</label>
+  </div>
 
-    <div id="itemForm">
-      <h2>Item Form</h2>
-      <div class="form-group">
-        <label for="customerName">Customer Name</label>
-        <input type="text" id="customerName" placeholder="Enter customer name">
-      </div>
-      <div class="form-group">
-        <label for="customerAddress">Customer Address</label>
-        <input type="text" id="customerAddress" placeholder="Enter customer address">
-      </div>
-      <div class="form-group">
-        <label for="customerMob">Customer Mobile</label>
-        <input type="text" id="customerMob" placeholder="Enter customer mobile">
-      </div>
+  <!-- Product Table -->
+  <table id="productTable">
+    <thead>
+      <tr>
+        <th class="item-name">Item Name</th>
+        <th class="product-type">Product Type</th>
+        <th class="weight">Weight</th>
+        <th class="rate-per-gram">Rate Per Gram</th>
+        <th class="charge-amount">Charge Amount</th>
+        <th class="discount">Discount</th>
+        <th class="total-price">Total Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Product rows will be inserted here -->
+    </tbody>
+  </table>
 
-      <div class="form-group">
-        <label for="itemName">Item Name</label>
-        <input type="text" id="itemName" placeholder="Enter item name">
+  <!-- Bill Modal -->
+  <div id="billModal" class="modal">
+    <div class="modal-content">
+      <div id="billDetails">
+        <!-- Bill content will be injected here -->
       </div>
-      <div class="form-group">
-        <label for="productType">Product Type</label>
-        <input type="text" id="productType" placeholder="Enter product type">
-      </div>
-      <div class="form-group">
-        <label for="weight">Weight</label>
-        <input type="number" id="weight" placeholder="Enter weight">
-      </div>
-      <div class="form-group">
-        <label for="ratePerGram">Rate Per Gram</label>
-        <input type="number" id="ratePerGram" placeholder="Enter rate per gram">
-      </div>
-      <div class="form-group">
-        <label for="chargeAmount">Charge Amount</label>
-        <input type="number" id="chargeAmount" placeholder="Enter charge amount">
-      </div>
-      <div class="form-group">
-        <label for="discount">Discount</label>
-        <input type="number" id="discount" placeholder="Enter discount">
-      </div>
-      <div class="form-group">
-        <label for="chargeType">Charge Type</label>
-        <select id="chargeType">
-          <option value="">Select Charge Type</option>
-          <option value="/gram">Per Gram</option>
-          <option value="/pieces">Per Piece</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="sgstRate">SGST Rate</label>
-        <input type="number" id="sgstRate" placeholder="Enter SGST rate">
-      </div>
-      <div class="form-group">
-        <label for="cgstRate">CGST Rate</label>
-        <input type="number" id="cgstRate" placeholder="Enter CGST rate">
-      </div>
-      <div class="form-group">
-        <label for="paidAmount">Paid Amount</label>
-        <input type="number" id="paidAmount" placeholder="Enter paid amount">
-      </div>
-      <button class="btn-primary" onclick="addProduct()">Add Product</button>
-      <button class="btn-success" onclick="showBill()">Show Bill</button>
+      <button onclick="printBill()">Print</button>
+      <button onclick="closeBillModal()">Close</button>
+      <button onclick="goBack()">Back</button>
     </div>
+  </div>
 
-    <h2>Product List</h2>
-    <div class="column-toggle">
-      <label><input type="checkbox" id="toggleItemName" checked> Item Name</label>
-      <label><input type="checkbox" id="toggleProductType" checked> Product Type</label>
-      <label><input type="checkbox" id="toggleWeight" checked> Weight</label>
-      <label><input type="checkbox" id="toggleRatePerGram" checked> Rate Per Gram</label>
-      <label><input type="checkbox" id="toggleChargeAmount" checked> Charge Amount</label>
-      <label><input type="checkbox" id="toggleDiscount" checked> Discount</label>
-      <label><input type="checkbox" id="toggleTotalPrice" checked> Total Price</label>
-    </div>
-    <table id="productTable">
-      <thead>
-        <tr>
-          <th class="item-name">Item Name</th>
-          <th class="product-type">Product Type</th>
-          <th class="weight">Weight</th>
-          <th class="rate-per-gram">Rate Per Gram</th>
-          <th class="charge-amount">Charge Amount</th>
-          <th class="discount">Discount</th>
-          <th class="total-price">Total Price</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <h2>Old Product List</h2>
-    <table id="oldProductTable">
-      <thead>
-        <tr>
-          <th>Item Name</th>
-          <th>Product Type</th>
-          <th>Weight</th>
-          <th>Rate Per Gram</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <button class="btn-primary" onclick="showOldItemForm()">Add Old Item</button>
-
-    <!-- Bill Modal -->
-    <div id="billModal" class="modal">
-      <div class="modal-content">
-        <h2>Bill</h2>
-        <div id="billDetails"></div>
-        <button class="btn-danger" onclick="closeBillModal()">Close</button>
+  <!-- Old Item Form Modal -->
+  <div id="oldItemFormModal" class="modal">
+    <div class="modal-content">
+      <div>
+        <label>Item Name:</label>
+        <input type="text" id="oldItemName">
       </div>
-    </div>
-
-    <!-- Old Item Form Modal -->
-    <div id="oldItemFormModal" class="modal">
-      <div class="modal-content">
-        <h2>Add Old Item</h2>
-        <div class="form-group">
-          <label for="oldItemName">Item Name</label>
-          <input type="text" id="oldItemName">
-        </div>
-        <div class="form-group">
-          <label for="oldProductType">Product Type</label>
-          <input type="text" id="oldProductType">
-        </div>
-        <div class="form-group">
-          <label for="oldWeight">Weight (grams)</label>
-          <input type="number" id="oldWeight">
-        </div>
-        <div class="form-group">
-          <label for="oldRatePerGram">Rate Per Gram</label>
-          <input type="number" id="oldRatePerGram">
-        </div>
-        <div class="form-group">
-          <label for="oldPrice">Price</label>
-          <input type="text" id="oldPrice" readonly>
-        </div>
-        <button class="btn-primary" onclick="addOldItem()">Add Item</button>
-        <button class="btn-danger" onclick="closeOldItemForm()">Cancel</button>
+      <div>
+        <label>Product Type:</label>
+        <input type="text" id="oldProductType">
+      </div>
+      <div>
+        <label>Weight:</label>
+        <input type="number" id="oldWeight">
+      </div>
+      <div>
+        <label>Rate Per Gram:</label>
+        <input type="number" id="oldRatePerGram">
+      </div>
+      <div>
+        <button onclick="addOldItem()">Add Old Item</button>
+        <button onclick="closeOldItemForm()">Close</button>
       </div>
     </div>
   </div>
@@ -253,6 +125,17 @@
 
       products.push({ itemName, productType, weight, ratePerGram, chargeAmount, discount, totalPrice });
       renderProductTable();
+      // Clear form fields
+      document.getElementById('itemName').value = '';
+      document.getElementById('productType').value = '';
+      document.getElementById('weight').value = '';
+      document.getElementById('ratePerGram').value = '';
+      document.getElementById('chargeAmount').value = '';
+      document.getElementById('discount').value = '';
+      document.getElementById('chargeType').value = '';
+      document.getElementById('sgstRate').value = '';
+      document.getElementById('cgstRate').value = '';
+      document.getElementById('paidAmount').value = '';
     }
 
     function renderProductTable() {
@@ -312,30 +195,30 @@
         <table>
           <thead>
             <tr>
-              <th>Item Name</th>
-              <th>Product Type</th>
-              <th>Weight</th>
-              <th>Rate Per Gram</th>
-              <th>Charge Amount</th>
-              <th>Discount</th>
-              <th>Total Price</th>
+              <th class="item-name">Item Name</th>
+              <th class="product-type">Product Type</th>
+              <th class="weight">Weight</th>
+              <th class="rate-per-gram">Rate Per Gram</th>
+              <th class="charge-amount">Charge Amount</th>
+              <th class="discount">Discount</th>
+              <th class="total-price">Total Price</th>
             </tr>
           </thead>
           <tbody>
             ${products.map(product => `
               <tr>
-                <td>${product.itemName}</td>
-                <td>${product.productType}</td>
-                <td>${product.weight}</td>
-                <td>${product.ratePerGram}</td>
-                <td>${product.chargeAmount.toFixed(2)}</td>
-                <td>${product.discount.toFixed(2)}</td>
-                <td>${product.totalPrice.toFixed(2)}</td>
+                <td class="item-name">${product.itemName}</td>
+                <td class="product-type">${product.productType}</td>
+                <td class="weight">${product.weight}</td>
+                <td class="rate-per-gram">${product.ratePerGram}</td>
+                <td class="charge-amount">${product.chargeAmount.toFixed(2)}</td>
+                <td class="discount">${product.discount.toFixed(2)}</td>
+                <td class="total-price">${product.totalPrice.toFixed(2)}</td>
               </tr>
             `).join('')}
           </tbody>
         </table>
-        <h3>Old Products</h3>
+        <h3>Old Items</h3>
         <table>
           <thead>
             <tr>
@@ -359,9 +242,9 @@
           </tbody>
         </table>
         <p><strong>Total Amount:</strong> ${totalAmount.toFixed(2)}</p>
-        <p><strong>Old Items Total:</strong> ${oldItemsTotal.toFixed(2)}</p>
         <p><strong>SGST (${sgstRate}%):</strong> ${sgstAmount.toFixed(2)}</p>
         <p><strong>CGST (${cgstRate}%):</strong> ${cgstAmount.toFixed(2)}</p>
+        <p><strong>Old Items Total:</strong> ${oldItemsTotal.toFixed(2)}</p>
         <p><strong>Final Total:</strong> ${finalTotal.toFixed(2)}</p>
         <p><strong>Paid Amount:</strong> ${paidAmount.toFixed(2)}</p>
         <p><strong>Remaining Balance:</strong> ${remainingBalance.toFixed(2)}</p>
@@ -371,12 +254,22 @@
       document.getElementById('billModal').style.display = 'flex';
     }
 
+    function printBill() {
+      const printWindow = window.open('', '', 'height=600,width=800');
+      printWindow.document.write('<html><head><title>Print Bill</title></head><body>');
+      printWindow.document.write(document.getElementById('billDetails').innerHTML);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+    }
+
     function closeBillModal() {
       document.getElementById('billModal').style.display = 'none';
     }
 
-    function showOldItemForm() {
-      document.getElementById('oldItemFormModal').style.display = 'flex';
+    function goBack() {
+      window.history.back();
     }
 
     function addOldItem() {
@@ -384,15 +277,19 @@
       const productType = document.getElementById('oldProductType').value;
       const weight = parseFloat(document.getElementById('oldWeight').value);
       const ratePerGram = parseFloat(document.getElementById('oldRatePerGram').value);
-      const price = weight * ratePerGram;
+      const price = (weight * ratePerGram).toFixed(2);
 
       oldItems.push({ itemName, productType, weight, ratePerGram, price });
-      renderOldProductTable();
-      closeOldItemForm();
+      renderOldItemsTable();
+      // Clear form fields
+      document.getElementById('oldItemName').value = '';
+      document.getElementById('oldProductType').value = '';
+      document.getElementById('oldWeight').value = '';
+      document.getElementById('oldRatePerGram').value = '';
     }
 
-    function renderOldProductTable() {
-      const tableBody = document.getElementById('oldProductTable').getElementsByTagName('tbody')[0];
+    function renderOldItemsTable() {
+      const tableBody = document.getElementById('oldItemsTable').getElementsByTagName('tbody')[0];
       tableBody.innerHTML = '';
       oldItems.forEach(item => {
         const row = tableBody.insertRow();
@@ -400,17 +297,25 @@
         row.insertCell().textContent = item.productType;
         row.insertCell().textContent = item.weight;
         row.insertCell().textContent = item.ratePerGram;
-        row.insertCell().textContent = item.price.toFixed(2);
+        row.insertCell().textContent = item.price;
       });
     }
 
     function closeOldItemForm() {
       document.getElementById('oldItemFormModal').style.display = 'none';
     }
-    
+
+    function openOldItemForm() {
+      document.getElementById('oldItemFormModal').style.display = 'flex';
+    }
+
     document.querySelectorAll('.column-toggle input').forEach(checkbox => {
       checkbox.addEventListener('change', updateColumnVisibility);
     });
+
+    window.onload = function() {
+      updateColumnVisibility();
+    };
   </script>
 
 </body>
