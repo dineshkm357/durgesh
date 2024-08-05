@@ -12,7 +12,7 @@
       background-color: #f4f4f4;
     }
     .container {
-      max-width: 800px;
+      max-width: 1000px;
       margin: auto;
       padding: 20px;
       background: #fff;
@@ -81,13 +81,19 @@
       padding: 20px;
       border-radius: 8px;
       width: 80%;
-      max-width: 500px;
+      max-width: 800px;
     }
     .hide {
       display: none;
     }
     .column-toggle {
       margin-bottom: 15px;
+    }
+    .column-toggle label {
+      margin-right: 15px;
+    }
+    .bill-table th, .bill-table td {
+      text-align: right;
     }
   </style>
 </head>
@@ -206,7 +212,17 @@
     <div id="billModal" class="modal">
       <div class="modal-content">
         <h2>Bill</h2>
-        <div id="billDetails"></div>
+        <table class="bill-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="billDetails">
+            <!-- Bill details will be injected here -->
+          </tbody>
+        </table>
         <button class="btn-success" onclick="printBill()">Print Bill</button>
         <button class="btn-danger" onclick="closeBillModal()">Close</button>
       </div>
@@ -232,11 +248,7 @@
           <label for="oldRatePerGram">Rate Per Gram</label>
           <input type="number" id="oldRatePerGram">
         </div>
-        <div class="form-group">
-          <label for="oldPrice">Price</label>
-          <input type="text" id="oldPrice" readonly>
-        </div>
-        <button class="btn-primary" onclick="addOldItem()">Add Item</button>
+        <button class="btn-primary" onclick="addOldItem()">Add Old Item</button>
         <button class="btn-danger" onclick="closeOldItemFormModal()">Close</button>
       </div>
     </div>
@@ -272,13 +284,13 @@
       const remainingAmount = netAmount - paidAmount;
 
       document.getElementById('billDetails').innerHTML = `
-        <p>Total Price: ${totalPrice.toFixed(2)}</p>
-        <p>SGST (${sgstRate}%): ${totalSGST.toFixed(2)}</p>
-        <p>CGST (${cgstRate}%): ${totalCGST.toFixed(2)}</p>
-        <p>Total Tax: ${totalTax.toFixed(2)}</p>
-        <p>Net Amount: ${netAmount.toFixed(2)}</p>
-        <p>Paid Amount: ${paidAmount.toFixed(2)}</p>
-        <p>Remaining Amount: ${remainingAmount.toFixed(2)}</p>
+        <tr><td>Total Price:</td><td>${totalPrice.toFixed(2)}</td></tr>
+        <tr><td>SGST (${sgstRate}%):</td><td>${totalSGST.toFixed(2)}</td></tr>
+        <tr><td>CGST (${cgstRate}%):</td><td>${totalCGST.toFixed(2)}</td></tr>
+        <tr><td>Total Tax:</td><td>${totalTax.toFixed(2)}</td></tr>
+        <tr><td>Net Amount:</td><td>${netAmount.toFixed(2)}</td></tr>
+        <tr><td>Paid Amount:</td><td>${paidAmount.toFixed(2)}</td></tr>
+        <tr><td>Remaining Amount:</td><td>${remainingAmount.toFixed(2)}</td></tr>
       `;
 
       renderProductTable();
@@ -311,9 +323,22 @@
     }
 
     function printBill() {
-      const billContent = document.getElementById('billDetails').innerHTML;
+      const billContent = `
+        <h2>Bill</h2>
+        <table class="bill-table" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align: left;">Description</th>
+              <th style="text-align: right;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${document.getElementById('billDetails').innerHTML}
+          </tbody>
+        </table>
+      `;
       const printWindow = window.open('', '', 'height=600,width=800');
-      printWindow.document.write('<html><head><title>Print Bill</title></head><body>');
+      printWindow.document.write('<html><head><title>Print Bill</title><style>table { width: 100%; border-collapse: collapse; } th, td { padding: 8px; text-align: right; border: 1px solid #ddd; }</style></head><body>');
       printWindow.document.write(billContent);
       printWindow.document.write('</body></html>');
       printWindow.document.close();
