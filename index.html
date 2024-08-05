@@ -303,205 +303,239 @@
     </div>
   </div>
 
-  <script>
-    const products = [];
-    const oldProducts = [];
+ <script>
+  const products = [];
+  const oldProducts = [];
 
-    document.querySelectorAll('.column-toggle input').forEach(input => {
-      input.addEventListener('change', () => {
-        const columnClass = input.id.replace('toggle', '').toLowerCase();
-        document.querySelectorAll(`.${columnClass}`).forEach(cell => {
-          cell.style.display = input.checked ? '' : 'none';
-        });
+  document.querySelectorAll('.column-toggle input').forEach(input => {
+    input.addEventListener('change', () => {
+      const columnClass = input.id.replace('toggle', '').toLowerCase();
+      document.querySelectorAll(`.${columnClass}`).forEach(cell => {
+        cell.style.display = input.checked ? '' : 'none';
       });
     });
+  });
 
-    function addProduct() {
-      const itemName = document.getElementById('itemName').value;
-      const productType = document.getElementById('productType').value;
-      const weight = parseFloat(document.getElementById('weight').value);
-      const ratePerGram = parseFloat(document.getElementById('ratePerGram').value);
-      const chargeAmount = parseFloat(document.getElementById('chargeAmount').value);
-      const discount = parseFloat(document.getElementById('discount').value);
-      const description = `${weight} grams @ ${ratePerGram}/gram + ${chargeAmount} - ${discount}`;
-      const amount = weight * ratePerGram + chargeAmount - discount;
+  function addProduct() {
+    const itemName = document.getElementById('itemName').value;
+    const productType = document.getElementById('productType').value;
+    const weight = parseFloat(document.getElementById('weight').value);
+    const ratePerGram = parseFloat(document.getElementById('ratePerGram').value);
+    const chargeAmount = parseFloat(document.getElementById('chargeAmount').value);
+    const discount = parseFloat(document.getElementById('discount').value);
+    const amount = weight * ratePerGram + chargeAmount - discount;
 
-      if (itemName && weight && ratePerGram && !isNaN(chargeAmount) && !isNaN(discount)) {
-        const totalPrice = amount;
-        products.push({ itemName, productType, weight, ratePerGram, chargeAmount, discount, description, amount, totalPrice });
-        renderProductTable();
-        clearForm();
-      } else {
-        alert('Please fill in all fields');
-      }
+    if (itemName && weight && ratePerGram && !isNaN(chargeAmount) && !isNaN(discount)) {
+      const totalPrice = amount;
+      products.push({ itemName, productType, weight, ratePerGram, chargeAmount, discount, amount, totalPrice });
+      renderProductTable();
+      clearForm();
+    } else {
+      alert('Please fill in all fields');
     }
+  }
 
-    function clearForm() {
-      document.getElementById('itemName').value = '';
-      document.getElementById('productType').value = '';
-      document.getElementById('weight').value = '';
-      document.getElementById('ratePerGram').value = '';
-      document.getElementById('chargeAmount').value = '';
-      document.getElementById('discount').value = '';
-    }
+  function clearForm() {
+    document.getElementById('itemName').value = '';
+    document.getElementById('productType').value = '';
+    document.getElementById('weight').value = '';
+    document.getElementById('ratePerGram').value = '';
+    document.getElementById('chargeAmount').value = '';
+    document.getElementById('discount').value = '';
+  }
 
-    function renderProductTable() {
-      const tbody = document.querySelector('#productTable tbody');
-      tbody.innerHTML = '';
-      products.forEach(product => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="item-name">${product.itemName}</td>
-          <td class="product-type">${product.productType}</td>
-          <td class="weight">${product.weight}</td>
-          <td class="rate-per-gram">${product.ratePerGram}</td>
-          <td class="charge-amount">${product.chargeAmount}</td>
-          <td class="discount">${product.discount}</td>
-          <td class="amount">${product.amount.toFixed(2)}</td>
-          <td class="total-price">${product.totalPrice.toFixed(2)}</td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    function showOldItemForm() {
-      document.getElementById('oldItemFormModal').style.display = 'flex';
-    }
-
-    function closeOldItemForm() {
-      document.getElementById('oldItemFormModal').style.display = 'none';
-    }
-
-    function addOldItem() {
-      const itemName = document.getElementById('oldItemName').value;
-      const productType = document.getElementById('oldProductType').value;
-      const weight = parseFloat(document.getElementById('oldWeight').value);
-      const ratePerGram = parseFloat(document.getElementById('oldRatePerGram').value);
-      const oldPrice = weight * ratePerGram;
-
-      if (itemName && weight && ratePerGram) {
-        oldProducts.push({ itemName, productType, weight, ratePerGram, oldPrice });
-        renderOldProductTable();
-        closeOldItemForm();
-      } else {
-        alert('Please fill in all fields');
-      }
-    }
-
-    function renderOldProductTable() {
-      const tbody = document.querySelector('#oldProductTable tbody');
-      tbody.innerHTML = '';
-      oldProducts.forEach(oldProduct => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${oldProduct.itemName}</td>
-          <td>${oldProduct.productType}</td>
-          <td>${oldProduct.weight}</td>
-          <td>${oldProduct.ratePerGram}</td>
-          <td>${oldProduct.oldPrice.toFixed(2)}</td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    function showBill() {
-      const customerName = document.getElementById('customerName').value;
-      const customerAddress = document.getElementById('customerAddress').value;
-      const customerMob = document.getElementById('customerMob').value;
-      const paidAmount = parseFloat(document.getElementById('paidAmount').value);
-      const sgstRate = parseFloat(document.getElementById('sgstRate').value) / 100;
-      const cgstRate = parseFloat(document.getElementById('cgstRate').value) / 100;
-
-      const totalAmount = products.reduce((sum, product) => sum + product.totalPrice, 0);
-      const oldItemsAmount = oldProducts.reduce((sum, oldProduct) => sum + oldProduct.oldPrice, 0);
-      const netAmount = totalAmount - oldItemsAmount;
-      const sgstAmount = netAmount * sgstRate;
-      const cgstAmount = netAmount * cgstRate;
-      const totalBillAmount = netAmount + sgstAmount + cgstAmount;
-
-      const billDetails = `
-        <p>Customer Name: ${customerName}</p>
-        <p>Customer Address: ${customerAddress}</p>
-        <p>Customer Mobile: ${customerMob}</p>
-        <h3>Products</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Item Name</th>
-              <th>Product Type</th>
-              <th>Weight</th>
-              <th>Rate Per Gram</th>
-              <th>Charge Amount</th>
-              <th>Discount</th>
-              <th>Amount</th>
-              <th>Total Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${products.map(product => `
-              <tr>
-                <td>${product.itemName}</td>
-                <td>${product.productType}</td>
-                <td>${product.weight}</td>
-                <td>${product.ratePerGram}</td>
-                <td>${product.chargeAmount}</td>
-                <td>${product.discount}</td>
-                <td>${product.amount.toFixed(2)}</td>
-                <td>${product.totalPrice.toFixed(2)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-        <h3>Old Products</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Item Name</th>
-              <th>Product Type</th>
-              <th>Weight</th>
-              <th>Rate Per Gram</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${oldProducts.map(oldProduct => `
-              <tr>
-                <td>${oldProduct.itemName}</td>
-                <td>${oldProduct.productType}</td>
-                <td>${oldProduct.weight}</td>
-                <td>${oldProduct.ratePerGram}</td>
-                <td>${oldProduct.oldPrice.toFixed(2)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-        <p>Total Amount: ${totalAmount.toFixed(2)}</p>
-        <p>Old Items Amount: ${oldItemsAmount.toFixed(2)}</p>
-        <p>Net Amount: ${netAmount.toFixed(2)}</p>
-        <p>SGST (${(sgstRate * 100).toFixed(2)}%): ${sgstAmount.toFixed(2)}</p>
-        <p>CGST (${(cgstRate * 100).toFixed(2)}%): ${cgstAmount.toFixed(2)}</p>
-        <p>Total Bill Amount: ${totalBillAmount.toFixed(2)}</p>
-        <p>Paid Amount: ${paidAmount.toFixed(2)}</p>
-        <p>Due Amount: ${(totalBillAmount - paidAmount).toFixed(2)}</p>
+  function renderProductTable() {
+    const tbody = document.querySelector('#productTable tbody');
+    tbody.innerHTML = '';
+    products.forEach(product => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="item-name">${product.itemName}</td>
+        <td class="product-type">${product.productType}</td>
+        <td class="weight">${product.weight}</td>
+        <td class="rate-per-gram">${product.ratePerGram}</td>
+        <td class="charge-amount">${product.chargeAmount}</td>
+        <td class="discount">${product.discount}</td>
+        <td class="amount">${product.amount.toFixed(2)}</td>
+        <td class="total-price">${product.totalPrice.toFixed(2)}</td>
       `;
+      tbody.appendChild(row);
+    });
+  }
 
-      document.getElementById('billDetails').innerHTML = billDetails;
-      document.getElementById('billModal').style.display = 'flex';
-    }
+  function showOldItemForm() {
+    document.getElementById('oldItemFormModal').style.display = 'flex';
+  }
 
-    function closeBillModal() {
-      document.getElementById('billModal').style.display = 'none';
-    }
+  function closeOldItemForm() {
+    document.getElementById('oldItemFormModal').style.display = 'none';
+  }
 
-    function printBill() {
-      const billContent = document.getElementById('billDetails').innerHTML;
-      const originalContent = document.body.innerHTML;
-      document.body.innerHTML = billContent;
-      window.print();
-      document.body.innerHTML = originalContent;
-      location.reload();
+  function addOldItem() {
+    const itemName = document.getElementById('oldItemName').value;
+    const productType = document.getElementById('oldProductType').value;
+    const weight = parseFloat(document.getElementById('oldWeight').value);
+    const ratePerGram = parseFloat(document.getElementById('oldRatePerGram').value);
+    const oldPrice = weight * ratePerGram;
+
+    if (itemName && weight && ratePerGram) {
+      oldProducts.push({ itemName, productType, weight, ratePerGram, oldPrice });
+      renderOldProductTable();
+      closeOldItemForm();
+    } else {
+      alert('Please fill in all fields');
     }
-  </script>
+  }
+
+  function renderOldProductTable() {
+    const tbody = document.querySelector('#oldProductTable tbody');
+    tbody.innerHTML = '';
+    oldProducts.forEach(oldProduct => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${oldProduct.itemName}</td>
+        <td>${oldProduct.productType}</td>
+        <td>${oldProduct.weight}</td>
+        <td>${oldProduct.ratePerGram}</td>
+        <td>${oldProduct.oldPrice.toFixed(2)}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  function showBill() {
+    const customerName = document.getElementById('customerName').value;
+    const customerAddress = document.getElementById('customerAddress').value;
+    const customerMob = document.getElementById('customerMob').value;
+    const paidAmount = parseFloat(document.getElementById('paidAmount').value);
+    const sgstRate = parseFloat(document.getElementById('sgstRate').value) / 100;
+    const cgstRate = parseFloat(document.getElementById('cgstRate').value) / 100;
+
+    const totalAmount = products.reduce((sum, product) => sum + product.totalPrice, 0);
+    const oldItemsAmount = oldProducts.reduce((sum, oldProduct) => sum + oldProduct.oldPrice, 0);
+    const netAmount = totalAmount - oldItemsAmount;
+    const sgstAmount = netAmount * sgstRate;
+    const cgstAmount = netAmount * cgstRate;
+    const totalBillAmount = netAmount + sgstAmount + cgstAmount;
+
+    const billDetails = `
+      <p>Customer Name: ${customerName}</p>
+      <p>Customer Address: ${customerAddress}</p>
+      <p>Customer Mobile: ${customerMob}</p>
+      <h3>Products</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Product Type</th>
+            <th>Weight</th>
+            <th>Rate Per Gram</th>
+            <th>Charge Amount</th>
+            <th>Discount</th>
+            <th>Amount</th>
+            <th>Total Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${products.map(product => `
+            <tr>
+              <td>${product.itemName}</td>
+              <td>${product.productType}</td>
+              <td>${product.weight}</td>
+              <td>${product.ratePerGram}</td>
+              <td>${product.chargeAmount}</td>
+              <td>${product.discount}</td>
+              <td>${product.amount.toFixed(2)}</td>
+              <td>${product.totalPrice.toFixed(2)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      <h3>Old Products</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Product Type</th>
+            <th>Weight</th>
+            <th>Rate Per Gram</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${oldProducts.map(oldProduct => `
+            <tr>
+              <td>${oldProduct.itemName}</td>
+              <td>${oldProduct.productType}</td>
+              <td>${oldProduct.weight}</td>
+              <td>${oldProduct.ratePerGram}</td>
+              <td>${oldProduct.oldPrice.toFixed(2)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+     <table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Total Amount</td>
+      <td>${totalAmount.toFixed(2)}</td>
+    </tr>
+    <tr>
+      <td>SGST (${(sgstRate * 100).toFixed(2)}%)</td>
+      <td>${sgstAmount.toFixed(2)}</td>
+    </tr>
+    <tr>
+      <td>CGST (${(cgstRate * 100).toFixed(2)}%)</td>
+      <td>${cgstAmount.toFixed(2)}</td>
+    </tr>
+    <tr>
+      <td>Total Bill Amount</td>
+      <td>${totalBillAmount.toFixed(2)}</td>
+    </tr>
+    <tr>
+      <td>Paid Amount</td>
+      <td>${paidAmount.toFixed(2)}</td>
+    </tr>
+    <tr>
+      <td>Old Items Amount</td>
+      <td>${oldItemsAmount.toFixed(2)}</td>
+    </tr>
+    <tr>
+      <td>Net Amount</td>
+      <td>${netAmount.toFixed(2)}</td>
+    </tr>
+    <tr>
+      <td>Due Amount</td>
+      <td>${(totalBillAmount - paidAmount).toFixed(2)}</td>
+    </tr>
+  </tbody>
+</table>
+ `;
+
+    document.getElementById('billDetails').innerHTML = billDetails;
+    document.getElementById('billModal').style.display = 'flex';
+  }
+
+  function closeBillModal() {
+    document.getElementById('billModal').style.display = 'none';
+  }
+
+  function printBill() {
+    const billContent = document.getElementById('billDetails').innerHTML;
+    const originalContent = document.body.innerHTML;
+    document.body.innerHTML = billContent;
+    window.print();
+    document.body.innerHTML = originalContent;
+    location.reload();
+  }
+</script>
+
 
 </body>
 </html>
