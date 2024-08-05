@@ -5,6 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Billing System</title>
   <style>
+     .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-height: 70%; /* Set maximum height for the modal content */
+      overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .btn-danger {
+      background-color: red;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-print {
+      background-color: green;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Custom scrollbar styles */
+    .modal-content::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    .modal-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -207,13 +261,21 @@
 
     <!-- Bill Modal -->
     <div id="billModal" class="modal">
-      <div class="modal-content">
-        <h2>Bill</h2>
-        <div id="billDetails"></div>
-        <button class="btn-danger" onclick="closeBillModal()">Close</button>
-        <button class="btn-print" onclick="printBill()">Print</button>
+        <div class="modal-content">
+          <h2>Bill</h2>
+          <div id="billDetails">
+            <!-- Your bill details content goes here -->
+            <!-- Add enough content to test the scrolling -->
+            <p>Item 1</p>
+            <p>Item 2</p>
+           
+            <!-- ...more items... -->
+          </div>
+          <button class="btn-danger" onclick="closeBillModal()">Close</button>
+          <button class="btn-print" onclick="printBill()">Print</button>
+        </div>
       </div>
-    </div>
+    
 
     <!-- Old Item Form Modal -->
     <div id="oldItemFormModal" class="modal">
