@@ -160,10 +160,10 @@
 <body>
 
   <div class="container">
-    <h1>Billing System</h1>
+    <h1>Product details form</h1>
 
     <div id="itemForm">
-      <h2>Item Form</h2>
+      <!-- <h2>Item Form</h2> -->
       <div class="form-group">
         <label for="customerName">Customer Name</label>
         <input type="text" id="customerName" placeholder="Enter customer name">
@@ -261,7 +261,7 @@
     <!-- Bill Modal -->
     <div id="billModal" class="modal">
         <div class="modal-content">
-          <h2>Bill</h2>
+          <!-- <h2>Bill</h2> -->
           <div id="billDetails">
             <!-- Your bill details content goes here -->
             <!-- Add enough content to test the scrolling -->
@@ -429,7 +429,19 @@
     const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
 
     const billDetails = `
+    
      <div class="date-container" id="dateDisplay">
+
+  <h1 class="text-lg font-semibold mb-4 text-center">AJAY JEWELLERS</h1>
+    <h4 class="text-sm font-semibold mb-4 text-center">
+      Thana road Khukhundoo, Deoria (Near Durga Mandir)<br />
+      Mob. No- 7007052900
+    </h4>
+    <h4 className="text-sm font-semibold mb-4 text-center">
+    
+    सोन व चांदी के आभूषणों के निर्माता व विक्रेता
+    </h4>
+
     <div style="display: flex; justify-content: space-between;">
      <p style="margin: 0;">Customer Name: ${customerName}</p>
      <p style="margin: 0;"> Date: ${formattedDate}</p>
@@ -519,7 +531,10 @@
       <td>Old Items Amount</td>
       <td>${oldItemsAmount.toFixed(2)}</td>
     </tr>
-    
+      <tr>
+      <td>Paid Amount</td>
+      <td>${paidAmount.toFixed(2)}</td>
+    </tr>
     <tr>
       <td>Net Amount</td>
       <td>${netAmount.toFixed(2)}</td>
