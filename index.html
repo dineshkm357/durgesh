@@ -39,13 +39,13 @@
       background-color: green;
       color: white;
       padding: 10px;
-      border: none;
+      border: 1px;
       cursor: pointer;
     }
 
     /* Custom scrollbar styles */
     .modal-content::-webkit-scrollbar {
-      width: 12px;
+      width: 5px;
     }
 
     .modal-content::-webkit-scrollbar-track {
@@ -145,6 +145,16 @@
     .column-toggle {
       margin-bottom: 15px;
     }
+    .date-container {
+            font-family: Arial, sans-serif;
+            color: #333;
+            text-align: center;
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
   </style>
 </head>
 <body>
@@ -192,11 +202,10 @@
         <input type="number" id="discount" placeholder="Enter discount">
       </div>
       <div class="form-group">
-        <label for="chargeType">Charge Type</label>
-        <select id="chargeType">
-          <option value="">Select Charge Type</option>
-          <option value="/gram">Per Gram</option>
-          <option value="/pieces">Per Piece</option>
+        <label for="unitType">Unit Type:</label>
+        <select id="unitType">
+          <option value="gram">Per Gram</option>
+          <option value="piece">Per Piece</option>
         </select>
       </div>
       <div class="form-group">
@@ -216,17 +225,7 @@
     </div>
 
     <h2>Product List</h2>
-    <div class="column-toggle">
-      <label><input type="checkbox" id="toggleItemName" checked> Item Name</label>
-      <label><input type="checkbox" id="toggleProductType" checked> Product Type</label>
-      <label><input type="checkbox" id="toggleWeight" checked> Weight</label>
-      <label><input type="checkbox" id="toggleRatePerGram" checked> Rate Per Gram</label>
-      <label><input type="checkbox" id="toggleChargeAmount" checked> Charge Amount</label>
-      <label><input type="checkbox" id="toggleDiscount" checked> Discount</label>
-      <label><input type="checkbox" id="toggleDescription" checked> Description</label>
-      <label><input type="checkbox" id="toggleAmount" checked> Amount</label>
-      <label><input type="checkbox" id="toggleTotalPrice" checked> Total Price</label>
-    </div>
+   
     <table id="productTable">
       <thead>
         <tr>
@@ -267,12 +266,12 @@
             <!-- Your bill details content goes here -->
             <!-- Add enough content to test the scrolling -->
             <p>Item 1</p>
-            <p>Item 2</p>
-           
-            <!-- ...more items... -->
+            <p>Item 2</p>      
           </div>
+          <div class="date-container" id="dateDisplay">
           <button class="btn-danger" onclick="closeBillModal()">Close</button>
           <button class="btn-print" onclick="printBill()">Print</button>
+        </div>
         </div>
       </div>
     
@@ -317,23 +316,32 @@
   });
 
   function addProduct() {
-    const itemName = document.getElementById('itemName').value;
-    const productType = document.getElementById('productType').value;
-    const weight = parseFloat(document.getElementById('weight').value);
-    const ratePerGram = parseFloat(document.getElementById('ratePerGram').value);
-    const chargeAmount = parseFloat(document.getElementById('chargeAmount').value);
-    const discount = parseFloat(document.getElementById('discount').value);
-    const amount = weight * ratePerGram + chargeAmount - discount;
+  const itemName = document.getElementById('itemName').value;
+  const productType = document.getElementById('productType').value;
+  const weight = parseFloat(document.getElementById('weight').value);
+  const ratePerGram = parseFloat(document.getElementById('ratePerGram').value);
+  const chargeAmount = parseFloat(document.getElementById('chargeAmount').value);
+  const discount = parseFloat(document.getElementById('discount').value);
+  const unitType = document.getElementById('unitType').value;
 
-    if (itemName && weight && ratePerGram && !isNaN(chargeAmount) && !isNaN(discount)) {
-      const totalPrice = amount;
-      products.push({ itemName, productType, weight, ratePerGram, chargeAmount, discount, amount, totalPrice });
-      renderProductTable();
-      clearForm();
-    } else {
-      alert('Please fill in all fields');
-    }
+  let amount;
+
+  if (unitType === 'gram') {
+    amount = weight * ratePerGram * chargeAmount - discount;
+  } else if (unitType === 'piece') {
+    amount = ratePerGram * weight + chargeAmount - discount;
   }
+
+  if (itemName && weight && ratePerGram && !isNaN(chargeAmount) && !isNaN(discount)) {
+    const totalPrice = amount;
+    products.push({ itemName, productType, weight, ratePerGram, chargeAmount, discount, amount, totalPrice });
+    renderProductTable();
+    clearForm();
+  } else {
+    alert('Please fill in all fields');
+  }
+}
+
 
   function clearForm() {
     document.getElementById('itemName').value = '';
@@ -414,14 +422,22 @@
     const totalAmount = products.reduce((sum, product) => sum + product.totalPrice, 0);
     const oldItemsAmount = oldProducts.reduce((sum, oldProduct) => sum + oldProduct.oldPrice, 0);
     const netAmount = totalAmount - oldItemsAmount;
-    const sgstAmount = netAmount * sgstRate;
-    const cgstAmount = netAmount * cgstRate;
-    const totalBillAmount = netAmount + sgstAmount + cgstAmount;
+    const sgstAmount = totalAmount * sgstRate;
+    const cgstAmount = totalAmount * cgstRate;
+    const totalBillAmount = totalAmount + sgstAmount + cgstAmount;
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
 
     const billDetails = `
-      <p>Customer Name: ${customerName}</p>
-      <p>Customer Address: ${customerAddress}</p>
-      <p>Customer Mobile: ${customerMob}</p>
+     <div class="date-container" id="dateDisplay">
+    <div style="display: flex; justify-content: space-between;">
+     <p style="margin: 0;">Customer Name: ${customerName}</p>
+     <p style="margin: 0;"> Date: ${formattedDate}</p>
+     </div>
+     <div style="display: flex; justify-content: space-between;">
+    <p style="margin: 0;">Customer Address: ${customerAddress}</p>
+    <p style="margin: 0;">Customer Mobile: ${customerMob}</p>
+  </div>
       <h3>Products</h3>
       <table>
         <thead>
@@ -498,14 +514,12 @@
       <td>Total Bill Amount</td>
       <td>${totalBillAmount.toFixed(2)}</td>
     </tr>
-    <tr>
-      <td>Paid Amount</td>
-      <td>${paidAmount.toFixed(2)}</td>
-    </tr>
+   
     <tr>
       <td>Old Items Amount</td>
       <td>${oldItemsAmount.toFixed(2)}</td>
     </tr>
+    
     <tr>
       <td>Net Amount</td>
       <td>${netAmount.toFixed(2)}</td>
