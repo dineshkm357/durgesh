@@ -327,7 +327,7 @@
   let amount;
 
   if (unitType === 'gram') {
-    amount = weight * ratePerGram * chargeAmount - discount;
+    amount = (weight * ratePerGram) +(weight * chargeAmount) - discount;
   } else if (unitType === 'piece') {
     amount = ratePerGram * weight + chargeAmount - discount;
   }
@@ -432,7 +432,7 @@
     
      <div class="date-container" id="dateDisplay">
 
-  <h1 class="text-lg font-semibold mb-4 text-center">AJAY JEWELLERS</h1>
+  <h1 class="text-lg font-semibold mb-4 text-center">AJAY JWELLERS</h1>
     <h4 class="text-sm font-semibold mb-4 text-center">
       Thana road Khukhundoo, Deoria (Near Durga Mandir)<br />
       Mob. No- 7007052900
@@ -536,12 +536,12 @@
       <td>${paidAmount.toFixed(2)}</td>
     </tr>
     <tr>
-      <td>Net Amount</td>
-      <td>${netAmount.toFixed(2)}</td>
+      <td>Deposit Amount</td>
+      <td>${(oldItemsAmount+paidAmount).toFixed(2)}</td>
     </tr>
     <tr>
       <td>Due Amount</td>
-      <td>${(totalBillAmount - paidAmount).toFixed(2)}</td>
+      <td>${(totalBillAmount - (oldItemsAmount+ paidAmount)).toFixed(2)}</td>
     </tr>
   </tbody>
 </table>
