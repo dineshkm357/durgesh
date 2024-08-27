@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ajay Jwellers</title>
+  <title>Ajay jwellers khukhundoo</title>
   <style>
      .modal {
       display: none;
@@ -88,14 +88,15 @@
     background-color: #f9f9f9;
 }
 
-h1 {
+h1,h2 {
     text-align: center;
     margin-bottom: 20px;
+    color: purple;
 }
 
 #itemForm {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Create 3 equal columns */
+    grid-template-columns: repeat(3, 1fr); 
     gap: 20px; /* Space between columns */
 }
 
@@ -359,7 +360,7 @@ button {
       <button class="btn-success" onclick="showBill()">Show Bill</button>
     </div>
 
-    <h2> New Product List</h2>
+    <h2>Product List</h2>
    
     <table id="productTable">
       <thead>
@@ -371,7 +372,7 @@ button {
           <th class="charge-amount">Charge Amount</th>
           <th class="discount">Discount</th>
           <th class="amount">Amount</th>
-          <th class="total-price">Total Price</th>
+          <!-- <th class="total-price">Total Price</th> -->
         </tr>
       </thead>
       <tbody></tbody>
@@ -496,11 +497,10 @@ button {
         <td class="item-name">${product.itemName}</td>
         <td class="product-type">${product.productType}</td>
         <td class="weight">${product.weight}</td>
-        <td class="rate-per-gram">${product.ratePerGram}</td>
-        <td class="charge-amount">${product.chargeAmount}</td>
-        <td class="discount">${product.discount}</td>
-        <td class="amount">${product.amount.toFixed(2)}</td>
-        <td class="total-price">${product.totalPrice.toFixed(2)}</td>
+        <td class="rate-per-gram">₹ ${product.ratePerGram}</td>
+        <td class="charge-amount">₹ ${product.chargeAmount}</td>
+        <td class="discount">₹ ${product.discount}</td>
+        <td class="amount">₹ ${product.amount.toFixed(2)}</td>
       `;
       tbody.appendChild(row);
     });
@@ -539,8 +539,8 @@ button {
         <td>${oldProduct.itemName}</td>
         <td>${oldProduct.productType}</td>
         <td>${oldProduct.weight}</td>
-        <td>${oldProduct.ratePerGram}</td>
-        <td>${oldProduct.oldPrice.toFixed(2)}</td>
+        <td>₹ ${oldProduct.ratePerGram}</td>
+        <td>₹ ${oldProduct.oldPrice.toFixed(2)}</td>
       `;
       tbody.appendChild(row);
     });
@@ -566,12 +566,12 @@ button {
     const billDetails = `
     
      <div class="date-container" id="dateDisplay">
- <h1 className="text-lg font-semibold mb-4 text-center">AJAY JEWELLERS</h1>
-    <h4 className="text-sm font-semibold mb-4 text-center">
+ <h1 className="text-lg font-semibold mb-2 text-center">AJAY JWELLERS</h1>
+    <h4 className="text-sm font-semibold mb-2 text-center">
       Thana road Khukhundoo, Deoria (Near Durga Mandir)<br />
       Mob. No- 7007052900
     </h4>
-    <h4 className="text-sm font-semibold mb-4 text-center">
+    <h4 className="text-sm font-semibold mb-2 text-center">
     
     सोन व चांदी के आभूषणों के निर्माता व विक्रेता
     </h4>
@@ -596,7 +596,6 @@ button {
             <label><input type="checkbox" class="column-toggle" data-column="chargeAmount" checked> Charge Amount</label>
             <label><input type="checkbox" class="column-toggle" data-column="discount" checked> Discount</label>
             <label><input type="checkbox" class="column-toggle" data-column="amount" checked> Amount</label>
-            <label><input type="checkbox" class="column-toggle" data-column="totalPrice" checked> Total Price</label>
         </div>
    
 </div>
@@ -613,7 +612,6 @@ button {
                 <th data-column="chargeAmount">Charge Amount</th>
                 <th data-column="discount">Discount</th>
                 <th data-column="amount">Amount</th>
-                <th data-column="totalPrice">Total Price</th>
             </tr>
         </thead>
         <tbody>
@@ -622,11 +620,10 @@ button {
               <td>${product.itemName}</td>
               <td>${product.productType}</td>
               <td>${product.weight}</td>
-              <td>${product.ratePerGram}</td>
-              <td>${product.chargeAmount}</td>
-              <td>${product.discount}</td>
-              <td>${product.amount.toFixed(2)}</td>
-               <td>${product.totalPrice.toFixed(2)}</td>
+              <td>₹ ${product.ratePerGram}</td>
+              <td>₹ ${product.chargeAmount}</td>   
+              <td>₹ ${product.discount}</td>
+              <td> ₹ ${product.amount.toFixed(2)}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -649,8 +646,8 @@ button {
               <td>${oldProduct.itemName}</td>
               <td>${oldProduct.productType}</td>
               <td>${oldProduct.weight}</td>
-              <td>${oldProduct.ratePerGram}</td>
-              <td>${oldProduct.oldPrice.toFixed(2)}</td>
+              <td>₹ ${oldProduct.ratePerGram}</td>
+              <td>₹ ${oldProduct.oldPrice.toFixed(2)}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -666,40 +663,40 @@ button {
   <tbody>
     <tr>
       <td>Total Amount</td>
-      <td>${totalAmount.toFixed(2)}</td>
+      <td>₹ ${totalAmount.toFixed(2)}</td>
     </tr>
     <tr>
       <td>SGST (${(sgstRate * 100).toFixed(2)}%)</td>
-      <td>${sgstAmount.toFixed(2)}</td>
+      <td>₹ ${sgstAmount.toFixed(2)}</td>
     </tr>
     <tr>
       <td>CGST (${(cgstRate * 100).toFixed(2)}%)</td>
-      <td>${cgstAmount.toFixed(2)}</td>
+      <td>₹ ${cgstAmount.toFixed(2)}</td>
     </tr>
     <tr>
       <td>Total Bill Amount</td>
-      <td>${totalBillAmount.toFixed(2)}</td>
+      <td>₹ ${totalBillAmount.toFixed(2)}</td>
     </tr>
    
     <tr>
       <td>Old Items Amount</td>
-      <td>${oldItemsAmount.toFixed(2)}</td>
+      <td>₹ ${oldItemsAmount.toFixed(2)}</td>
     </tr>
       <tr>
       <td>Paid Amount</td>
-      <td>${paidAmount.toFixed(2)}</td>
+      <td>₹ ${paidAmount.toFixed(2)}</td>
     </tr>
     <tr>
       <td>Deposit Amount</td>
-      <td>${(oldItemsAmount+paidAmount).toFixed(2)}</td>
+      <td>₹ ${(oldItemsAmount+paidAmount).toFixed(2)}</td>
     </tr>
     <tr>
       <td>Due Amount</td>
-      <td>${(totalBillAmount - (oldItemsAmount+ paidAmount)).toFixed(2)}</td>
+      <td>₹ ${(totalBillAmount - (oldItemsAmount+ paidAmount)).toFixed(2)}</td>
     </tr>
   </tbody>
 </table>
-
+<h5>Thank you for Shopping !!</h5>
  `;
 
     document.getElementById('billDetails').innerHTML = billDetails;
